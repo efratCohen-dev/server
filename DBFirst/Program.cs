@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using DAL.Data;
 using DAL.Interfaces;
+using DBFirst.MiddleWare;
+using Serilog;
 
 string myCors = "_myCors";
 var builder = WebApplication.CreateBuilder(args);
@@ -45,6 +47,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors(myCors);
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.File(@"C:\Users\user\Desktop\תיכנות\יד\פרוייקט חנוכה\DBFirst.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+app.UseMiddleware<GlobalErorr>();
+app.UseMiddleware<MiddleWare>();
+
 
 app.UseHttpsRedirection();
 
